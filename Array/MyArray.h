@@ -15,10 +15,25 @@ public:
 	int SetCountCols(int NewCountCols);
 	int SetData(double** newData, int NewCountRows, int NewcountCols);
 	int SetElement(int IndexRows, int IndexCols, T Value);
-	double GetElement(int index Rows, int IndexCols);
+	double GetElement(int indexRows, int IndexCols);
 
 	//construct
-	MyArray(int NewCountRows = 1, int NewCountCols = 1);
+	MyArray(int NewCountRows = 1, int NewCountCols = 1) {
+		Data = new T * [NewCountRows];
+		if (Data == nullptr)
+			exit(0);
+		for (int i = 0; i < NewCountRows; i++) {
+			Data[i] = new T[NewCountCols];
+			if (Data[i] == nullptr) {
+				for (int j = 0; j < i; j++)
+					delete Data[j];
+				delete Data;
+				exit(0);
+			}
+		}
+		CountRows = NewCountRows;
+		CountCols = NewCountCols;
+	};
 	MyArray(MyArray& a);
 	~MyArray();
 
@@ -37,32 +52,14 @@ public:
 	bool operator==(MyArray& a);
 
 	//cin & cout
-	friend ostream& operator<<(ostream& stream, MyArray<T>& A) {
+	/*friend ostream& operator<<(ostream& stream, MyArray<T>& A) {
 
 	}
 
 	friend istream& operator>>(istream& stream, MyArray<T>& A) {
 
-	}
+	}*/
 };
-
-template <typename T>
-MyArray<T>::MyArray(int NewCountRows = 1, int NewCountCols = 1) {
-	Data = new T*[NewCountRows];
-	if(Data == nullptr)
-		exit(0);
-	for (int i = 0; i < NewCountRows; i++) {
-		Data[i] = new T[NewCountCols];
-		if (Data[i] == nullptr) {
-			for (int j = 0; j < i; j++)
-				delete Data[j];
-			delete Data;
-			Exit(0);
-		}
-	}
-	CountRows = NewCountRows;
-	CountCols = NewCountCols;
-}
 
 template <typename T>
 MyArray<T>::MyArray(MyArray<T>& a) {
