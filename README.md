@@ -1,0 +1,2 @@
+# MyArray
+class Array
