@@ -95,7 +95,6 @@ public:
 	friend MyArray operator/(MyArray& a, T b);
 	void operator=(MyArray& a);
 	bool operator==(MyArray& a);
-
 	//cin & cout
 	friend ostream& operator<<(ostream& stream, MyArray<T>& A) {
 		cout << "Arr[" << A.GetCountRows() << "][" << A.GetCountCols() << "] = " << endl;
