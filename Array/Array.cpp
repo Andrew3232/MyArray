@@ -9,10 +9,22 @@ using namespace std;
 
 int main()
 {
-	MyArray<double> a1(1, 1), a2(3, 3);
+	MyArray<double> a1(3, 3), a2(3, 3), a3(1,1);
+	cin >> a1;
 	cin >> a2;
-	//a2.SetData(a1.GetData(), 1, 1);
-	cout << a2 << endl;
+
+	double b = 5;
+	cout << "a1 + a2\n" << *&(a1 + a2) << endl;
+	cout << "a1 + b\n" << *&(a1 + b) << endl;
+	cout << "a1 - b\n" << *&(b - a1) << endl;
+	cout << "a2 * b\n" << *&(b * a2) << endl;
+	cout << "a2 / b\n" << *&(a2 / b) << endl;
+	cout << "a1 * a2\n" << *&(a1 * a2) << endl;
+	cout << "a1\n" << a1 << endl;
+	a3 = *&(a1 * a2);
+	cout << "a2\n" << a2 << endl;
+	cout << "a3\n" << a3 << endl;
+	cout << (a1 == a3) << endl;
 
 
 }

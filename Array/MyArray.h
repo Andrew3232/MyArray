@@ -75,7 +75,7 @@ public:
 			}
 		}
 		CountRows = a.GetCountRows();
-		CountCols = a.GetCountRows();
+		CountCols = a.GetCountCols();
 		for (int i = 0; i < CountRows; i++)
 			for (int j = 0; j < CountCols; j++)
 				Data[i][j] = a.GetElement(i, j);
@@ -83,18 +83,166 @@ public:
 	~MyArray() {};
 
 	//operators
-	friend MyArray operator+(MyArray& a, MyArray& b);
-	friend MyArray operator+(MyArray& a, T b);
-	friend MyArray operator+(T b, MyArray& a);
-	friend MyArray operator-(MyArray& a, MyArray& b);
-	friend MyArray operator-(MyArray& a, T b);
-	friend MyArray operator-(T b, MyArray& a);
-	friend MyArray operator*(MyArray& a, MyArray& b);
-	friend MyArray operator*(MyArray& a, T b);
-	friend MyArray operator*(T b, MyArray& a);
-	friend MyArray operator/(MyArray& a, T b);
-	void operator=(MyArray& a);
-	bool operator==(MyArray& a);
+	friend MyArray operator+(MyArray& a, MyArray& b) {
+		if (a.GetCountRows() == b.GetCountRows() && a.GetCountCols() == b.GetCountCols()) {
+			T temp;
+			MyArray<T> c(a.GetCountRows(), b.GetCountCols());
+			for (int i = 0; i < c.GetCountRows(); i++) {
+				for (int j = 0; j < c.GetCountCols(); j++) {
+					temp = a.GetElement(i, j) + b.GetElement(i, j);
+					c.SetElement(i, j, temp);
+				}
+			}
+			return c;
+		}
+		else
+			exception;
+	}; 
+	friend MyArray operator+(MyArray& a, T b){
+		T temp;
+		MyArray<T> c(a.GetCountRows(), a.GetCountCols());
+		for (int i = 0; i < a.GetCountRows(); i++) {
+			for (int j = 0; j < a.GetCountCols(); j++) {
+				temp = a.GetElement(i, j) + b;
+				c.SetElement(i, j, temp);
+			}
+		}
+		return c;
+	};
+	friend MyArray operator+(T b, MyArray& a) {
+		T temp;
+		MyArray<T> c(a.GetCountRows(), a.GetCountCols());
+		for (int i = 0; i < a.GetCountRows(); i++) {
+			for (int j = 0; j < a.GetCountCols(); j++) {
+				temp = a.GetElement(i, j) + b;
+				c.SetElement(i, j, temp);
+			}
+		}
+		return c;
+	};
+	friend MyArray operator-(MyArray& a, MyArray& b) {
+		if (a.GetCountRows() == b.GetCountRows() && a.GetCountCols() == b.GetCountCols()) {
+			T temp;
+			MyArray<T> c(a.GetCountRows(), b.GetCountCols());
+			for (int i = 0; i < c.GetCountRows(); i++) {
+				for (int j = 0; j < c.GetCountCols(); j++) {
+					temp = a.GetElement(i, j) - b.GetElement(i, j);
+					c.SetElement(i, j, temp);
+				}
+			}
+			return c;
+		}
+		else
+			exception;
+	};
+	friend MyArray operator-(MyArray& a, T b) {
+		T temp;
+		MyArray<T> c(a.GetCountRows(), a.GetCountCols());
+		for (int i = 0; i < a.GetCountRows(); i++) {
+			for (int j = 0; j < a.GetCountCols(); j++) {
+				temp = a.GetElement(i, j) - b;
+				c.SetElement(i, j, temp);
+			}
+		}
+		return c;
+	};
+	friend MyArray operator-(T b, MyArray& a) {
+		T temp;
+		MyArray<T> c(a.GetCountRows(), a.GetCountCols());
+		for (int i = 0; i < a.GetCountRows(); i++) {
+			for (int j = 0; j < a.GetCountCols(); j++) {
+				temp = a.GetElement(i, j) - b;
+				c.SetElement(i, j, temp);
+			}
+		}
+		return c;
+	};
+
+	friend MyArray operator*(MyArray& a, MyArray& b) {
+		if (a.GetCountCols() != b.GetCountRows()) {
+			cout << ("ColsA != RowsB") << endl;
+			exception;
+			exit(0);
+		}
+		else {
+			T temp;
+			MyArray<T> c(a.GetCountRows(), b.GetCountCols());
+			for(int k = 0; k < b.GetCountCols(); k++)
+			for (int i = 0; i < a.GetCountRows(); i++) {
+				temp = 0;
+				for (int j = 0; j < b.GetCountCols(); j++) {
+					temp += a.GetElement(k, j) * b.GetElement(j,i);					
+				}
+				c.SetElement(k, i, temp);
+			}
+			return c;
+		}
+	};
+	friend MyArray operator*(MyArray& a, T b) {
+		T temp;
+		MyArray<T> c(a.GetCountRows(), a.GetCountCols());
+		for (int i = 0; i < a.GetCountRows(); i++) {
+			for (int j = 0; j < a.GetCountCols(); j++) {
+				temp = a.GetElement(i, j) * b;
+				c.SetElement(i, j, temp);
+			}
+		}
+		return c;
+	};
+	friend MyArray operator*(T b, MyArray& a) {
+		T temp;
+		MyArray<T> c(a.GetCountRows(), a.GetCountCols());
+		for (int i = 0; i < a.GetCountRows(); i++) {
+			for (int j = 0; j < a.GetCountCols(); j++) {
+				temp = a.GetElement(i, j) * b;
+				c.SetElement(i, j, temp);
+			}
+		}
+		return c;
+	};
+	friend MyArray operator/(MyArray& a, T b) {
+		T temp;
+		MyArray<T> c(a.GetCountRows(), a.GetCountCols());
+		for (int i = 0; i < a.GetCountRows(); i++) {
+			for (int j = 0; j < a.GetCountCols(); j++) {
+				temp = a.GetElement(i, j) / b;
+				c.SetElement(i, j, temp);
+			}
+		}
+		return c;
+	};
+
+	void operator=(MyArray& a) {
+		Data = new T * [a.GetCountRows()];
+		if (Data == nullptr)
+			exit(0);
+		for (int i = 0; i < a.GetCountRows(); i++) {
+			Data[i] = new T[a.GetCountCols()];
+			if (Data[i] == nullptr) {
+				for (int j = 0; j < i; j++)
+					delete Data[j];
+				delete Data;
+				exit(0);
+			}
+		}
+		CountRows = a.GetCountRows();
+		CountCols = a.GetCountCols();
+		for (int i = 0; i < CountRows; i++)
+			for (int j = 0; j < CountCols; j++)
+				Data[i][j] = a.GetElement(i, j);
+	};
+	bool operator==(MyArray& a) {
+		if (this->GetCountRows()!= a.GetCountRows() || this->GetCountCols() != a.GetCountCols())
+			exit(0);
+		for (int i = 0; i < a.GetCountRows(); i++) {
+			for (int j = 0; j < a.GetCountCols(); j++) {
+				if (GetElement(i, j) != a.GetElement(i, j))
+					return false;
+			}
+		}
+		return true;
+	};
+
 	//cin & cout
 	friend ostream& operator<<(ostream& stream, MyArray<T>& A) {
 		cout << "Arr[" << A.GetCountRows() << "][" << A.GetCountCols() << "] = " << endl;
@@ -107,7 +255,7 @@ public:
 		return stream;
 	};	
 	friend istream& operator>>(istream& stream, MyArray<T>& A) {
-		cout << "Enter array:\n";
+		cout << "Enter Array:\n";
 		T buffer;
 		for (int i = 0; i < A.GetCountRows(); i++) {
 			cout << "Row(" << i << ")\n";
@@ -119,26 +267,3 @@ public:
 		return stream;
 	};
 };
-/*
-template <typename T>
-MyArray<T>::MyArray(MyArray<T>& a) {
-	//cout << "In CopyConstructor";
-	Data = new T * [a.GetCountRows()];
-	if (Data == nullptr)
-		exit(0);
-	for (int i = 0; i < a.GetCountRows(); i++) {
-		Data[i] = new T[a.GetCountCols()];
-		if (Data[i] == nullptr) {
-			for (int j = 0; j < i; j++)
-				delete Data[j];
-			delete Data;
-			exit(0);
-		}
-	}
-	CountRows = a.GetCountRows();
-	CountCols = a.GetCountRows();
-	for (int i = 0; i < CountRows; i++)
-		for (int j = 0; j < CountCols; j++)
-			Data[i][j] = a.GetElement(i, j);
-}
-*/
