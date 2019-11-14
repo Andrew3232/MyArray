@@ -245,7 +245,7 @@ public:
 
 	//cin & cout
 	friend ostream& operator<<(ostream& stream, MyArray<T>& A) {
-		cout << "Arr[" << A.GetCountRows() << "][" << A.GetCountCols() << "] = " << endl;
+		cout << "Arr[" << A.GetCountRows() << "][" << A.GetCountCols() << "] :" << endl;
 		for (int i = 0; i < A.GetCountRows(); i++) {
 			for (int j = 0; j < A.GetCountCols(); j++) {
 				stream << A.GetElement(i, j) << " ";
