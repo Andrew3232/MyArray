@@ -24,14 +24,14 @@ public:
 	T** GetData() {
 		return Data;
 	};
-
+		
 	void SetCountRows(int NewCountRows) {
 		CountRows = NewCountRows;
 	};
 	void SetCountCols(int NewCountCols) {
 		CountCols = NewCountCols;
 	};
-
+	
 	void SetData(T** newData, int NewCountRows, int NewcountCols) {
 		for(int i = 0; i < CountRows; i++)
 			delete Data[i];
@@ -42,6 +42,41 @@ public:
 	void SetElement(int IndexRows, int IndexCols, T Value) {
 		Data[IndexRows][IndexCols] = Value;
 	};	
+
+	// изменение размера массива и заполнение новых элементов
+	void AddElement(int NewCountRows, int NewCountCols, T Val) {
+		if (NewCountRows >= CountRows && NewCountCols >= CountCols) {
+			int PrevRows = CountRows;
+			int PrevCols = CountCols;
+			T** temp;
+			temp = new T * [PrevRows];
+			for (int i = 0; i < PrevRows; i++) {
+				temp[i] = new T[PrevCols];
+				for (int j = 0; j < PrevCols; j++) {
+					temp[i][j] = GetElement(i, j);
+				}
+			}
+			for (int i = 0; i < CountRows; i++)
+				delete[] Data[i];
+			delete[] Data;
+			
+			Data = new T * [NewCountRows];
+			for (int i = 0; i < NewCountRows; i++) {
+				Data[i] = new T[NewCountCols];
+				for (int j = 0; j < NewCountCols; j++) {
+					if (i < PrevRows && j < PrevCols) {
+						Data[i][j] = temp[i][j];
+					}
+					else
+					{
+						Data[i][j] = Val;
+					}
+				}
+			}
+			CountRows = NewCountRows;
+			CountCols = NewCountCols;
+		}
+	};
 
 	//construct
 	MyArray(int NewCountRows = 1, int NewCountCols = 1) {
